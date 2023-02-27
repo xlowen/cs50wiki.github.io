@@ -1,7 +1,10 @@
 import random
 from django.shortcuts import render
-
+from django import forms
 from . import util
+
+class NewTaskForm(forms.Form):
+    Title = forms.CharField(label="New entry title:")
 
 def index(request):
     return render(request, "encyclopedia/index.html", {
@@ -18,6 +21,11 @@ def showentry(request, title):
         return render(request, "wiki/entry.html", {
             "title": title
         })
+    
+def new(request):
+    return render(request, "encyclopedia/new.html", {
+        "form": NewTaskForm()
+    })
 
 def result(request):
     req = request.GET['q'].lower()
