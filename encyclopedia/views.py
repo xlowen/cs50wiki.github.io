@@ -5,6 +5,7 @@ from . import util
 
 class NewTaskForm(forms.Form):
     Title = forms.CharField(label="New entry title:")
+    Content = forms.CharField(widget=forms.Textarea)
 
 def index(request):
     return render(request, "encyclopedia/index.html", {
@@ -13,6 +14,7 @@ def index(request):
 
 def showentry(request, title):
     etitle = util.get_entry(title)
+    print(title)
     if etitle != None:
         return render(request, "wiki/entry.html", {
         "etitle": etitle
@@ -23,6 +25,18 @@ def showentry(request, title):
         })
     
 def new(request):
+    if request.method == "POST":
+        form = NewTaskForm(request.POST)
+        if form.is_valid():
+            Title = form.cleaned_data["Title"]
+            Content = form.cleaned_data["Content"]
+            util.save_entry(Title, Content)
+            print("file is saved.")
+        else:
+            return render(request, "encyclopedia/new.html", {
+                "form": form
+            })
+
     return render(request, "encyclopedia/new.html", {
         "form": NewTaskForm()
     })
@@ -47,7 +61,6 @@ def result(request):
             "etitle": etitle
         })
     elif result:
-        print(result)
         return render(request, "encyclopedia/result.html", {
             "req": req,
             "results": result
