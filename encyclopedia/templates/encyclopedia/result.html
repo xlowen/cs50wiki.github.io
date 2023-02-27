@@ -1,0 +1,31 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Search Results
+{% endblock %}
+
+{% block body %}
+    <h1>Here are your results:</h1>
+
+    <ul>
+        {% if req == None %}
+            <span> You have not provided a search input.</span>
+            <p> May I suggest you read about <a href="wiki/{{ rentry }}">{{ rentry }}</a></p>
+        {% else %}
+            {% if req not in results %}
+            <span> You searched for <strong>{{ req }}</strong>.</span>
+            <p>Were you looking for any of these?</p>
+            <ul>
+                {% for result in results %}
+                <li><a href="wiki/{{ result }}">{{ result }}</a></li>
+                {%  endfor %}
+            </ul>
+            {% else %}
+                <span> You searched for <strong>{{ req }}</strong>.</span>
+                <p>We found no matches in our database :(</p>
+            {% endif %}
+        {% endif %}
+
+    </ul>
+
+{% endblock %}
