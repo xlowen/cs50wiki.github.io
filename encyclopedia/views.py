@@ -1,5 +1,6 @@
 import random
 from django.shortcuts import render
+from django.shortcuts import redirect
 from django import forms
 from . import util
 
@@ -17,7 +18,8 @@ def showentry(request, title):
     print(title)
     if etitle != None:
         return render(request, "wiki/entry.html", {
-        "etitle": etitle
+        "etitle": etitle,
+        "title": title
     })
     else:
         return render(request, "wiki/entry.html", {
@@ -30,8 +32,17 @@ def new(request):
         if form.is_valid():
             Title = form.cleaned_data["Title"]
             Content = form.cleaned_data["Content"]
-            util.save_entry(Title, Content)
-            print("file is saved.")
+            exists = f"{Title}"
+            if util.save_entry(Title, Content) == None:
+                print("same name")
+                return render(request, "encyclopedia/new.html", {
+                    "exists": exists
+                })
+            else:
+                print("accessed else")
+                return redirect(f"wiki/{ Title }", {
+                    "etitle": Title
+                })                        
         else:
             return render(request, "encyclopedia/new.html", {
                 "form": form

@@ -5,12 +5,17 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Create a new encyclopedia entry:</h1>
+    
+    {% if exists %}
+    <h3>An entry for <a href="wiki/{{ exists }}">{{ exists }}</a> already exists. You can edit it.</h3>
+    <h4>You can also try and create a <a href="{% url 'encyclopedia:new' %}">new entry</a> again.</h4>
+    {% else %}
 
+    <h1>Create a new encyclopedia entry:</h1>
     <form action="{% url 'encyclopedia:new' %}" method="POST">
         {% csrf_token %}
         {{ form }}
         <input type="submit" value="Add Entry">
     </form>
-
+    {% endif %}
 {% endblock %}
