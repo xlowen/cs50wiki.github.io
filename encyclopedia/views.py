@@ -8,6 +8,7 @@ class NewTaskForm(forms.Form):
     Title = forms.CharField(label="New entry title:")
     Content = forms.CharField(widget=forms.Textarea)
 
+
 def index(request):
     return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries()
@@ -15,7 +16,6 @@ def index(request):
 
 def showentry(request, title):
     etitle = util.get_entry(title)
-    print(title)
     if etitle != None:
         return render(request, "wiki/entry.html", {
         "etitle": etitle,
@@ -82,3 +82,40 @@ def result(request):
         return render(request, "encyclopedia/result.html",{
         "req": req
         })
+
+def edit(request):
+
+    
+    class EditForm(forms.Form):
+        Name = forms.CharField(widget=forms.HiddenInput)
+        Current = forms.CharField(widget=forms.Textarea)
+
+    if request.method == "GET":
+        current = request.GET['title']
+        form = EditForm(initial={'Current': util.fname(current), 'Name': current})
+        print("1", util.fname(current))
+        print("2", request.POST)
+        print("3", current)
+        print("4", form["Current"])
+        print("5", request.GET)
+ 
+        return render(request, "encyclopedia/edit.html",{
+            "form": form
+        })
+          
+    elif request.method == "POST":
+
+        print("2", request.POST)
+        current = request.POST['Name']
+        print("3", current)
+        form = EditForm(request.POST)
+        if form.is_valid():
+            Content = form.cleaned_data['Current']
+            util.save_edit(current, Content)
+            return redirect(f"wiki/{ current }", {
+                "etitle": current
+            })
+        else: 
+            return render(request, "encyclopedia/index.html")
+    else:
+        return render(request, f"encyclopedia/index.html")

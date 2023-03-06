@@ -10,9 +10,15 @@
     <ul>
         {% if etitle %}
             <li>{{ etitle }}</li>
+            <form action="{% url 'encyclopedia:edit' %}" method="GET">
+                {% csrf_token %}
+                <input type="submit" value="Edit this entry">
+                <input type="hidden" name="title" value="{{ title }}">
+            </form>
         {% else %}
             <li>Sorry a page for <strong>{{ title }}</strong> was not found.</li>
         {% endif %}
     </ul>
+    
 
 {% endblock %}
