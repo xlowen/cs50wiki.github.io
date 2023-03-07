@@ -12,10 +12,12 @@
     {% else %}
 
     <h1>Create a new encyclopedia entry:</h1>
-    <form action="{% url 'encyclopedia:new' %}" method="POST">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="Add Entry">
-    </form>
+    <div class="mb-3">
+        <form action="{% url 'encyclopedia:new' %}" method="POST">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="Add Entry">
+        </form>
+    </div>
     {% endif %}
 {% endblock %}

@@ -5,8 +5,8 @@ from django import forms
 from . import util
 
 class NewTaskForm(forms.Form):
-    Title = forms.CharField(label="New entry title:")
-    Content = forms.CharField(widget=forms.Textarea)
+    Title = forms.CharField(label="New entry title:", widget=forms.TextInput(attrs={'class': 'form-control', 'style': 'width: 80%'}))
+    Content = forms.CharField(widget=forms.Textarea(attrs={'class':'form-control tasize', 'style': 'width: 80%; height: 300px'}))
 
 
 def index(request):
@@ -56,7 +56,8 @@ def result(request):
     req = request.GET['q'].lower()
     entries = util.lowentry(util.list_entries())
     result = [entry for entry in entries if req in entry]
-    print(req)
+    print("isso é request.get:", request.GET)
+    print("isso é req:", req)
     
     if req == "":
         print("entered null")
@@ -66,9 +67,10 @@ def result(request):
         "rentry": rentry
     })
     elif req.lower() in entries:
-        print("entered entryfound")
         etitle = util.get_entry(req)
+        print(etitle)
         return render(request, "wiki/entry.html",{
+            "title": req,
             "etitle": etitle
         })
     elif result:
@@ -88,7 +90,7 @@ def edit(request):
     
     class EditForm(forms.Form):
         Name = forms.CharField(widget=forms.HiddenInput)
-        Current = forms.CharField(widget=forms.Textarea)
+        Current = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'style': 'width: 80%; height: 300px;'}))
 
     if request.method == "GET":
         current = request.GET['title']
