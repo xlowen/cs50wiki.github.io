@@ -7,9 +7,9 @@
 {% block body %}
     <h1>{{ title }}</h1>
 
-    <ul>
+    
         {% if etitle %}
-            <li>{{ etitle }}</li>
+            {{ etitle }}
             <form action="{% url 'encyclopedia:edit' %}" method="GET">
                 {% csrf_token %}
                 <input type="submit" value="Edit this entry">
@@ -18,7 +18,7 @@
         {% else %}
             <li>Sorry a page for <strong>{{ title }}</strong> was not found.</li>
         {% endif %}
-    </ul>
+    
     
 
 {% endblock %}

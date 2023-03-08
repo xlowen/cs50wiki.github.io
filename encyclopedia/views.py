@@ -1,4 +1,5 @@
 import random
+import markdown2
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django import forms
@@ -15,7 +16,8 @@ def index(request):
     })
 
 def showentry(request, title):
-    etitle = util.get_entry(title)
+    atitle = util.get_entry(title)
+    etitle = markdown2.markdown(atitle)
     if etitle != None:
         return render(request, "wiki/entry.html", {
         "etitle": etitle,
@@ -121,3 +123,11 @@ def edit(request):
             return render(request, "encyclopedia/index.html")
     else:
         return render(request, f"encyclopedia/index.html")
+    
+def randompage(request):
+
+    print(request)
+    rentry = random.choice(util.list_entries())
+    return redirect(f"wiki/{ rentry }", {
+        "rentry" : rentry
+    })
