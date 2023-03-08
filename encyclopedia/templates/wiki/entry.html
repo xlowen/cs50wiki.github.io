@@ -5,11 +5,9 @@
 {% endblock %}
 
 {% block body %}
-    <h1>{{ title }}</h1>
-
-    
+ 
         {% if etitle %}
-            {{ etitle }}
+            {{ etitle | safe }}
             <form action="{% url 'encyclopedia:edit' %}" method="GET">
                 {% csrf_token %}
                 <input type="submit" value="Edit this entry">
